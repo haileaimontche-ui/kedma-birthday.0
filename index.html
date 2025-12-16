@@ -1,0 +1,406 @@
+ 
+
+
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kedma — Joyeux anniversaire</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#0c1320;
+  --bg2:#1a2840;
+  --light:#f6f2ed;
+  --accent:#d9a5b3;
+  --glass:rgba(255,255,255,.08);
+  --night1:#070b14;
+  --night2:#141c2e;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;font-family:Montserrat,sans-serif;scroll-behavior:smooth}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(900px 700px at 15% 10%, rgba(217,165,179,.25), transparent),
+    radial-gradient(900px 700px at 85% 90%, rgba(120,160,220,.22), transparent),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--light);
+  transition:background 1.2s ease;
+}
+
+body.night{
+  background:linear-gradient(180deg,var(--night1),var(--night2));
+}
+
+main{padding:48px}
+
+.container{
+  max-width:1600px;
+  margin:auto;
+  display:flex;
+  gap:56px;
+}
+
+/* PORTRAIT */
+.portrait{
+  width:340px;
+  height:340px;
+  position:sticky;
+  top:80px;
+  border-radius:24px;
+  animation:float 6s ease-in-out infinite;
+}
+.portrait::before{
+  content:"";
+  position:absolute;
+  inset:-18px;
+  background:conic-gradient(from 0deg,var(--accent),transparent,var(--accent));
+  filter:blur(22px);
+  opacity:.6;
+  animation:spin 12s linear infinite;
+  border-radius:50%;
+}
+.portrait img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:22px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:translateY(-10px)}}
+
+.content{flex:1}
+h1{font-family:"Playfair Display",serif;font-size:64px;margin:0}
+.subtitle{opacity:.85;margin-bottom:26px}
+
+/* BUTTONS */
+.controls{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:32px;
+}
+button{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.15);
+  color:var(--light);
+  padding:12px 18px;
+  border-radius:14px;
+  cursor:pointer;
+}
+
+/* STORY */
+#about{
+  display:none;
+  max-width:1000px;
+  line-height:1.75;
+  animation:fadeUp .6s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}}
+
+/* TIMELINE */
+#timeline{margin-top:80px}
+.step{display:flex;gap:20px;margin-bottom:32px;opacity:0;transform:translateY(30px);transition:.8s}
+.step.visible{opacity:1;transform:none}
+.dot{width:14px;height:14px;background:var(--accent);border-radius:50%;margin-top:6px}
+
+/* GALLERY */
+.gallery{
+  margin-top:80px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+.card{
+  height:320px;
+  overflow:hidden;
+  border-radius:20px;
+  opacity:0;
+  transform:scale(.95);
+  transition:.8s;
+}
+.card.visible{opacity:1;transform:scale(1)}
+.card img{width:100%;height:100%;object-fit:cover}
+
+/* FINAL MESSAGE (Moment suspendu) */
+#finalMessage{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.85);
+  z-index:9999;
+  pointer-events:none;
+  text-align:center;
+}
+#finalMessage.active{
+  display:flex;
+  pointer-events:auto;
+}
+#finalText{
+  font-size:48px;
+  max-width:900px;
+  line-height:1.4;
+}
+#signature{
+  margin-top:24px;
+  font-family:"Playfair Display",serif;
+  font-size:32px;
+  opacity:0;
+}
+
+/* BUTTERFLY */
+#butterflyBtn{
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  font-size:28px;
+  cursor:pointer;
+  opacity:.7;
+  animation:butterfly 4s ease-in-out infinite;
+  z-index:50;
+}
+@keyframes butterfly{
+  50%{transform:translateY(-8px)}
+}
+
+/* SECRET */
+#secret{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:60;
+}
+#secret img{
+  max-width:80%;
+  max-height:80%;
+  border-radius:24px;
+}
+
+/* DISCREET MESSAGE */
+#hiddenNote{
+  text-align:center;
+  font-size:12px;
+  opacity:.2;
+  margin-top:80px;
+  cursor:pointer;
+}
+
+/* CONFETTI */
+#confetti{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:100;
+}
+
+footer{margin-top:64px;opacity:.7}
+
+@media(max-width:900px){
+  .container{flex-direction:column}
+  .gallery{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<main>
+<div class="container">
+
+<div class="portrait">
+<img src="portrait.jpg">
+</div>
+
+<div class="content">
+<h1>Kedma</h1>
+<div class="subtitle">Ce site est un fragment de ce que tu représentes</div>
+
+<div class="controls">
+<button id="storyBtn">Raconter son histoire</button>
+<button id="momentsBtn">Nos moments</button>
+<button id="surpriseBtn">Surprise 🎉</button>
+<button id="finalBtn">Final ✨</button>
+<button id="nightBtn">🌙</button>
+</div>
+
+
+<section id="about">
+  <p>
+    Aujourd’hui est un jour précieux, un jour qui compte pour chacun de nous.
+    Ce 17 décembre marque la naissance de notre chère Kedma : notre rayon de joie,
+    notre amour d’amie… et pour moi, bien plus encore — ma meilleure amie.
+  </p>
+
+  <p>
+    Je ne prétendrai jamais connaître toute son histoire, mais celle que j’ai découverte
+    depuis cette fin d’année 2023 est celle d’une femme ravissante, joyeuse, amusante,
+    drôle, délirante, belle, éduquée, vibrante et fière.
+    Une femme qui s’est installée dans mes pensées sans prévenir,
+    et qui est devenue indispensable à mon quotidien.
+  </p>
+
+  <p>
+    Que dire d’elle ?
+    Qu’elle est généreuse ?
+    Qu’elle est la plus sincère que je connaisse ?
+    Qu’elle est une confidente rare,
+    toujours présente pour ceux qu’elle aime ?
+    Oui… Elle est tout cela.
+    Et bien plus encore.
+  </p>
+
+  <p>
+    Sans elle, beaucoup d’entre nous ne se seraient jamais rencontrés.
+    Dans notre groupe, elle est la sangle qui nous relie,
+    le ciment silencieux de notre amitié.
+  </p>
+
+  <p>
+    Aujourd’hui, c’est ton anniversaire, Kedma.
+    Mais c’est aussi un nouveau départ — encore un, peut-être…
+    Pourtant, tu connais déjà l’adversité,
+    et tu fais partie des personnes les plus fortes et téméraires que j’aie jamais rencontrées.
+  </p>
+
+  <p>
+    Que Dieu te garde, te protège,
+    et bénisse ta famille pour t’avoir façonnée ainsi… tellement TOI,
+    tellement unique qu’aucun adjectif n’est suffisamment grand pour te décrire.
+  </p>
+
+  <p>
+    Tu es toi.
+    Et on t’aime —
+    moi, surtout.
+  </p>
+</section>
+      
+<section id="timeline">
+        <div class="step">
+          <div class="dot"></div>
+          <div class="step-content">
+            <h3>Août 2023</h3>
+            <p>Une rencontre qui change tout.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot"></div>
+          <div class="step-content">
+            <h3>2024</h3>
+            <p>Des moments simples, devenus essentiels.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="dot"></div>
+          <div class="step-content">
+            <h3>17 décembre</h3>
+            <p>Un anniversaire. Une lumière de plus.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="gallery">
+        <div class="card"><img src="photo1.jpg"></div>
+        <div class="card"><img src="photo2.jpg"></div>
+        <div class="card"><img src="photo3.jpg"></div>
+        <div class="card"><img src="photo4.jpg"></div>
+        <div class="card"><img src="photo5.jpg"></div>
+        <div class="card"><img src="portrait.jpg"></div>
+      </section>
+
+<div id="hiddenNote">Certains messages ne se lisent qu’avec le cœur.</div>
+
+<footer>Fait avec amour — Harold</footer>
+</div>
+</div>
+</main>
+
+<div id="butterflyBtn">🦋</div>
+<div id="secret"><img src="secret.jpg"></div>
+
+<div id="finalMessage">
+<div>
+<div id="finalText"></div>
+<div id="signature">— Harold</div>
+</div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+/* BASIC */
+storyBtn.onclick=()=>about.style.display=about.style.display==="block"?"none":"block";
+momentsBtn.onclick=()=>timeline.scrollIntoView({behavior:"smooth"});
+nightBtn.onclick=()=>document.body.classList.toggle("night");
+
+/* SCROLL ANIM */
+const observer=new IntersectionObserver(e=>{
+e.forEach(v=>v.target.classList.toggle("visible",v.isIntersecting));
+},{threshold:.3});
+document.querySelectorAll(".step,.card").forEach(el=>observer.observe(el));
+
+/* BUTTERFLY */
+butterflyBtn.onclick=()=>secret.style.display="flex";
+secret.onclick=()=>secret.style.display="none";
+
+/* FINAL MOMENT */
+finalBtn.onclick=()=>{
+finalMessage.classList.add("active");
+finalText.textContent="";
+signature.style.opacity=0;
+const txt=" 🎉 Joyeux anniversaire Kedma 🎉. Il y a des personnes qu’on garde pour toujours. Tu es inoubliable ✨ ";
+let i=0;
+const t=setInterval(()=>{
+finalText.textContent+=txt[i++];
+if(i===txt.length){
+clearInterval(t);
+setTimeout(()=>signature.style.opacity=1,800);
+setTimeout(()=>finalMessage.classList.remove("active"),4500);
+}
+},60);
+};
+
+/* CONFETTI */
+const ctx=confetti.getContext("2d");
+confetti.width=innerWidth;confetti.height=innerHeight;
+let parts=[];
+surpriseBtn.onclick=()=>{
+parts=[];
+for(let i=0;i<600;i++)parts.push({
+x:innerWidth/2,y:innerHeight/3,
+vx:(Math.random()-.5)*20,vy:Math.random()*-20,
+g:.4,l:120,c:`hsl(${Math.random()*360},90%,60%)`
+});
+};
+(function anim(){
+ctx.clearRect(0,0,confetti.width,confetti.height);
+parts.forEach(p=>{
+p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.l--;
+ctx.fillStyle=p.c;
+ctx.beginPath();ctx.arc(p.x,p.y,4,0,6.28);ctx.fill();
+});
+parts=parts.filter(p=>p.l>0);
+requestAnimationFrame(anim);
+})();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
